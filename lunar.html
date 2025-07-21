@@ -6,12 +6,10 @@
   <title>양력 → 음력 변환기</title>
 </head>
 <body>
-  <div style="max-width: 400px; margin: 30px auto; padding: 20px; border: 1px solid #ccc; font-family: sans-serif;">
-    <h3>양력 → 음력 변환기</h3>
-    <input type="date" id="solarInput" style="width: 100%; padding: 6px;" />
-    <button onclick="convertToLunar()" style="margin-top: 10px; width: 100%; padding: 8px;">변환</button>
-    <p id="result" style="margin-top: 15px; font-weight: bold;"></p>
-  </div>
+  <h3>양력을 음력으로 변환하기</h3>
+  <input type="date" id="solarInput" />
+  <button onclick="convertToLunar()">변환</button>
+  <p id="result"></p>
 
   <script>
     async function convertToLunar() {
@@ -22,16 +20,17 @@
       }
 
       const [y, m, d] = solarDate.split("-");
-      const apiUrl = `https://astro.kasi.re.kr/openapi/service/Life/SpcConv?solYear=${y}&solMonth=${m}&solDay=${d}&serviceKey=Wbkp%2FAlqvdi4rZl16gzdorIlWA89mFN6x79yc8JoTmHDkGz55az5k9VofuYNLeRz%2BWBg89%2F96R5RNrZuin0i1w%3D%3D&_type=json`;
+      const apiUrl = `https://astro.kasi.re.kr/openapi/service/Life/SpcConv?solYear=${y}&solMonth=${m}&solDay=${d}&serviceKey=여기에_API_KEY&_type=json`;
 
       try {
         const res = await fetch(apiUrl);
         const data = await res.json();
-        if (data.response.body.items.item) {
-          const lunar = data.response.body.items.item;
-          const lunarDate = \`\${lunar.lunYear}-\${lunar.lunMonth.padStart(2, '0')}-\${lunar.lunDay.padStart(2, '0')}\`;
-          const isLeap = lunar.leapMonth === "1" ? " (윤달)" : "";
-          document.getElementById("result").innerText = \`음력: \${lunarDate}\${isLeap}\`;
+        const item = data.response.body.items.item;
+
+        if (item) {
+          const lunarDate = `${item.lunYear}-${item.lunMonth.padStart(2, "0")}-${item.lunDay.padStart(2, "0")}`;
+          const leap = item.leapMonth === "1" ? " (윤달)" : "";
+          document.getElementById("result").innerText = `음력: ${lunarDate}${leap}`;
         } else {
           document.getElementById("result").innerText = "결과를 불러올 수 없습니다.";
         }
