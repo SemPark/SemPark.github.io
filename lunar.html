@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.6">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ko"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;양력 → 음력 변환기&lt;/title&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div style="max-width: 400px; margin: 30px auto; padding: 20px; border: 1px solid #ccc; font-family: sans-serif;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3&gt;양력 → 음력 변환기&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="date" id="solarInput" style="width: 100%; padding: 6px;" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="convertToLunar()" style="margin-top: 10px; width: 100%; padding: 8px;"&gt;변환&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p id="result" style="margin-top: 15px; font-weight: bold;"&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>async function convertToLunar() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const solarDate = document.getElementById("solarInput").value;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!solarDate) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("result").innerText = "날짜를 선택하세요.";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>const [y, m, d] = solarDate.split("-");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const apiUrl = `https://astro.kasi.re.kr/openapi/service/Life/SpcConv?solYear=${y}&amp;solMonth=${m}&amp;solDay=${d}&amp;serviceKey=Wbkp%2FAlqvdi4rZl16gzdorIlWA89mFN6x79yc8JoTmHDkGz55az5k9VofuYNLeRz%2BWBg89%2F96R5RNrZuin0i1w%3D%3D&amp;_type=json`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const res = await fetch(apiUrl);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const data = await res.json();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>if (data.response.body.items.item) {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>const lunar = data.response.body.items.item;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>const lunarDate = `${lunar.lunYear}-${lunar.lunMonth.padStart(2, '0')}-${lunar.lunDay.padStart(2, '0')}`;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>const isLeap = lunar.leapMonth === "1" ? " (윤달)" : "";</p>
+<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("result").innerText = `음력: ${lunarDate}${isLeap}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">          </span>document.getElementById("result").innerText = "결과를 불러올 수 없습니다.";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById("result").innerText = "API 오류 발생";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
