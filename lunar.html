@@ -1,59 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    span.s1 {font-kerning: none}
-    span.s2 {font: 12.0px Helvetica; font-kerning: none; color: #535353; -webkit-text-stroke: 0px #535353}
-  </style>
-</head>
-<body>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;!DOCTYPE html&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;html lang="ko"&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;head&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;title&gt;양력 → 음력 변환기&lt;/title&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/head&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;body&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;h3&gt;양력을 음력으로 변환하기&lt;/h3&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;input type="date" id="solarInput" /&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;button onclick="convertToLunar()"&gt;변환&lt;/button&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;p id="result"&gt;&lt;/p&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000; min-height: 17.0px"><span class="s1"><b></b></span><br></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;script&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>async function convertToLunar() {</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>const solarDate = document.getElementById("solarInput").value;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>if (!solarDate) {</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>document.getElementById("result").innerText = "날짜를 선택하세요.";</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>return;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>}</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000; min-height: 17.0px"><span class="s1"><b></b></span><br></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>const [y, m, d] = solarDate.split("-");</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>const apiUrl = `https://astro.kasi.re.kr/openapi/service/Life/SpcConv?solYear=${y}&amp;solMonth=${m}&amp;solDay=${d}&amp;serviceKey=</b></span><span class="s2">Wbkp/Alqvdi4rZl16gzdorIlWA89mFN6x79yc8JoTmHDkGz55az5k9VofuYNLeRz+WBg89/96R5RNrZuin0i1w==</span><span class="s1"><b>&amp;type=json`;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000; min-height: 17.0px"><span class="s1"><b></b></span><br></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>try {</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>const res = await fetch(apiUrl);</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>const data = await res.json();</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>const item = data.response.body.items.item;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000; min-height: 17.0px"><span class="s1"><b></b></span><br></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>if (item) {</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">          </span>const lunarDate = `${item.lunYear}-${item.lunMonth.padStart(2, "0")}-${item.lunDay.padStart(2, "0")}`;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">          </span>const leap = item.leapMonth === "1" ? " (윤달)" : "";</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">          </span>document.getElementById("result").innerText = `음력: ${lunarDate}${leap}`;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>} else {</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">          </span>document.getElementById("result").innerText = "결과를 불러올 수 없습니다.";</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>}</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>} catch (e) {</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">        </span>document.getElementById("result").innerText = "API 오류 발생";</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">      </span>}</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">    </span>}</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b><span class="Apple-converted-space">  </span>&lt;/script&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/body&gt;</b></span></h3>
-<h3 style="margin: 0.0px 0.0px 14.0px 0.0px; font: 14.0px 'Apple SD Gothic Neo'; -webkit-text-stroke: #000000"><span class="s1"><b>&lt;/html&gt;</b></span></h3>
-</body>
-</html>
+<script>
+  async function convertToLunar() {
+    const solarDate = document.getElementById("solarInput").value;
+    if (!solarDate) {
+      document.getElementById("result").innerText = "날짜를 선택하세요.";
+      return;
+    }
+
+    const [y, m, d] = solarDate.split("-");
+    const apiKey = "여기에_디코딩된_API_키_붙여넣기";
+    const url = `https://apis.data.go.kr/B090041/openapi/service/LrsrCldInfoService/getSolCalInfo?solYear=${y}&solMonth=${m}&solDay=${d}&ServiceKey=${Wbkp/Alqvdi4rZl16gzdorIlWA89mFN6x79yc8JoTmHDkGz55az5k9VofuYNLeRz+WBg89/96R5RNrZuin0i1w==
+}&_type=json`;
+
+    try {
+      const res = await fetch(url);
+      const json = await res.json();
+      const item = json.response.body.items.item;
+
+      if (item) {
+        const lunarDate = `${item.lunYear}-${item.lunMonth.padStart(2, "0")}-${item.lunDay.padStart(2, "0")}`;
+        const leap = item.leapMonth === "1" ? " (윤달)" : "";
+        document.getElementById("result").innerText = `음력: ${lunarDate}${leap}`;
+      } else {
+        document.getElementById("result").innerText = "변환 결과가 없습니다.";
+      }
+    } catch (e) {
+      document.getElementById("result").innerText = "API 오류 발생";
+    }
+  }
+</script>
