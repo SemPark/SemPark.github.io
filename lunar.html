@@ -1,33 +1,48 @@
+<!-- 변환기 HTML 및 CSS 부분은 동일 -->
+
+<!-- 스크립트 -->
+<script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/lib/solarlunar.min.js"></script>
 <script>
-  async function convertToLunar() {
-    const solarDate = document.getElementById("solarInput").value;
-    if (!solarDate) {
-      document.getElementById("result").innerText = "날짜를 선택하세요.";
+  // 천간·지지 매핑
+  const stemMap = {
+    '甲':'갑','乙':'을','丙':'병','丁':'정','戊':'무',
+    '己':'기','庚':'경','辛':'신','壬':'임','癸':'계'
+  };
+  const branchMap = {
+    '子':'자','丑':'축','寅':'인','卯':'묘','辰':'진','巳':'사',
+    '午':'오','未':'미','申':'신','酉':'유','戌':'술','亥':'해'
+  };
+  function transliterate(gz) {
+    return stemMap[gz.charAt(0)] + branchMap[gz.charAt(1)];
+  }
+
+  function convertDate() {
+    var y = parseInt(document.getElementById('year').value, 10);
+    var m = parseInt(document.getElementById('month').value, 10);
+    var d = parseInt(document.getElementById('day').value, 10);
+    var outputDiv = document.getElementById('output');
+    if (!y || !m || !d) {
+      outputDiv.innerHTML = '<div class="info">날짜를 모두 입력하세요.</div>';
       return;
     }
-
-    const [y, m, d] = solarDate.split("-");
-
-    // 인코딩된 API 키 사용
-    const apiKey = "Wbkp%2FAlqvdi4rZl16gzdorIlWA89mFN6x79yc8JoTmHDkGz55az5k9VofuYNLeRz%2BWBg89%2F96R5RNrZuin0i1w%3D%3D";
-
-    const url = `https://apis.data.go.kr/B090041/openapi/service/LrsrCldInfoService/getSolCalInfo?solYear=${y}&solMonth=${m}&solDay=${d}&ServiceKey=${apiKey}&_type=json`;
-
-    try {
-      const res = await fetch(url);
-      const json = await res.json();
-      const item = json.response.body.items.item;
-
-      if (item) {
-        const lunarDate = `${item.lunYear}-${item.lunMonth.toString().padStart(2, "0")}-${item.lunDay.toString().padStart(2, "0")}`;
-        const leap = item.leapMonth === "1" ? " (윤달)" : "";
-        document.getElementById("result").innerText = `음력: ${lunarDate}${leap}`;
-      } else {
-        document.getElementById("result").innerText = "변환 결과가 없습니다.";
-      }
-    } catch (e) {
-      document.getElementById("result").innerText = "API 오류 발생";
-      console.error(e); // 오류 로그 확인용
+    var lunar = solarlunar.solar2lunar(y, m, d);
+    if (!lunar || !lunar.lYear) {
+      outputDiv.innerHTML = '<div class="info">변환할 수 없는 날짜입니다.</div>';
+      return;
     }
+    var weekday = new Date(y, m - 1, d).toLocaleDateString('ko-KR', { weekday:'long' });
+    var leapText = lunar.isLeap ? '윤달' : '평달';
+    var yGzKor = transliterate(lunar.gzYear) + '(' + lunar.gzYear + ')';
+    var mGzKor = transliterate(lunar.gzMonth) + '(' + lunar.gzMonth + ')';
+    var dGzKor = transliterate(lunar.gzDay) + '(' + lunar.gzDay + ')';
+    var animal = lunar.animal;
+
+    // 문자열 연결 방식으로 HTML 작성 (템플릿 리터럴 사용 안함)
+    var html = '';
+    html += '<p class="solar-date">양력 ' + y + '년 ' + m + '월 ' + d + '일 (' + weekday + ')</p>';
+    html += '<p class="lunar-date">음력날짜&nbsp;&nbsp;' + lunar.lYear + '년 ' + lunar.lMonth + '월 ' + lunar.lDay + '일&nbsp;(' + leapText + ')</p>';
+    html += '<p class="info">음력간지&nbsp;&nbsp;' + yGzKor + '년 ' + mGzKor + '월 ' + dGzKor + '일</p>';
+    html += '<p class="info">띠&nbsp;&nbsp;' + animal + '띠</p>';
+    outputDiv.innerHTML = html;
   }
 </script>
