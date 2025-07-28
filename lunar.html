@@ -1,21 +1,108 @@
-<!-- 변환기 HTML 및 CSS 부분은 동일 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>양력 날짜를 음력으로 변환</title>
+  <!-- solarlunar 라이브러리 로딩 -->
+  <script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/lib/solarlunar.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f7f7f7;
+    }
+    #lunar-converter {
+      max-width: 420px;
+      margin: 40px auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+    #lunar-converter h2 {
+      font-size: 1.4em;
+      margin-bottom: 15px;
+      text-align: center;
+      color: #333;
+    }
+    #lunar-converter .input-group {
+      margin-bottom: 15px;
+    }
+    #lunar-converter label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    #lunar-converter input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    #lunar-converter button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 1em;
+      color: #fff;
+      background: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #lunar-converter button:hover {
+      background: #0056b3;
+    }
+    #output {
+      margin-top: 20px;
+    }
+    #output .solar-date {
+      font-weight: bold;
+    }
+    #output .lunar-date {
+      color: #c60000;
+      font-weight: bold;
+    }
+    #output .info {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+<div id="lunar-converter">
+  <h2>양력 날짜를 음력으로 변환</h2>
+  <div class="input-group">
+    <label for="year">년 (1900–2100)</label>
+    <input id="year" type="number" min="1900" max="2100" placeholder="예: 1985">
+  </div>
+  <div class="input-group">
+    <label for="month">월 (1–12)</label>
+    <input id="month" type="number" min="1" max="12" placeholder="예: 11">
+  </div>
+  <div class="input-group">
+    <label for="day">일 (1–31)</label>
+    <input id="day" type="number" min="1" max="31" placeholder="예: 3">
+  </div>
+  <button onclick="convertDate()">변환</button>
+  <div id="output"></div>
+</div>
 
-<!-- 스크립트 -->
-<script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/lib/solarlunar.min.js"></script>
 <script>
   // 천간·지지 매핑
-  const stemMap = {
+  var stemMap = {
     '甲':'갑','乙':'을','丙':'병','丁':'정','戊':'무',
     '己':'기','庚':'경','辛':'신','壬':'임','癸':'계'
   };
-  const branchMap = {
+  var branchMap = {
     '子':'자','丑':'축','寅':'인','卯':'묘','辰':'진','巳':'사',
     '午':'오','未':'미','申':'신','酉':'유','戌':'술','亥':'해'
   };
   function transliterate(gz) {
     return stemMap[gz.charAt(0)] + branchMap[gz.charAt(1)];
   }
-
   function convertDate() {
     var y = parseInt(document.getElementById('year').value, 10);
     var m = parseInt(document.getElementById('month').value, 10);
@@ -36,8 +123,6 @@
     var mGzKor = transliterate(lunar.gzMonth) + '(' + lunar.gzMonth + ')';
     var dGzKor = transliterate(lunar.gzDay) + '(' + lunar.gzDay + ')';
     var animal = lunar.animal;
-
-    // 문자열 연결 방식으로 HTML 작성 (템플릿 리터럴 사용 안함)
     var html = '';
     html += '<p class="solar-date">양력 ' + y + '년 ' + m + '월 ' + d + '일 (' + weekday + ')</p>';
     html += '<p class="lunar-date">음력날짜&nbsp;&nbsp;' + lunar.lYear + '년 ' + lunar.lMonth + '월 ' + lunar.lDay + '일&nbsp;(' + leapText + ')</p>';
@@ -46,3 +131,5 @@
     outputDiv.innerHTML = html;
   }
 </script>
+</body>
+</html>
