@@ -1,135 +1,215 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8" />
   <title>양력 날짜를 음력으로 변환</title>
-  <!-- solarlunar 라이브러리 로딩 -->
   <script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/lib/solarlunar.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Noto Sans KR', sans-serif;
       background: #f7f7f7;
     }
-    #lunar-converter {
+
+    .container {
       max-width: 420px;
-      margin: 40px auto;
+      margin: 60px auto;
       padding: 25px;
-      background: #ffffff;
-      border-radius: 8px;
+      background: #fff;
+      border-radius: 10px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+      position: relative;
     }
-    #lunar-converter h2 {
-      font-size: 1.4em;
-      margin-bottom: 15px;
+
+    .language-selector {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .language-selector select {
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+
+    .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    h2 {
       text-align: center;
-      color: #333;
+      margin-bottom: 20px;
     }
-    #lunar-converter .input-group {
+
+    .input-group {
       margin-bottom: 15px;
     }
-    #lunar-converter label {
+
+    label {
       display: block;
-      margin-bottom: 5px;
       font-weight: bold;
-      color: #555;
+      margin-bottom: 5px;
     }
-    #lunar-converter input {
+
+    input {
       width: 100%;
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      box-sizing: border-box;
     }
-    #lunar-converter button {
+
+    button {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
-      font-size: 1em;
-      color: #fff;
       background: #007bff;
+      color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-size: 1em;
       cursor: pointer;
     }
-    #lunar-converter button:hover {
+
+    button:hover {
       background: #0056b3;
     }
+
     #output {
       margin-top: 20px;
     }
-    #output .solar-date {
-      font-weight: bold;
-    }
-    #output .lunar-date {
+
+    .lunar-date {
       color: #c60000;
       font-weight: bold;
-    }
-    #output .info {
-      margin-top: 5px;
     }
   </style>
 </head>
 <body>
-<div id="lunar-converter">
-  <h2>양력 날짜를 음력으로 변환</h2>
+
+<div class="container">
+  <div class="language-selector">
+    <span class="material-symbols-outlined">language</span>
+    <select id="lang" onchange="changeLang()">
+      <option value="ko">🇰🇷</option>
+      <option value="ja">🇯🇵</option>
+      <option value="en">🇺🇸</option>
+    </select>
+  </div>
+
+  <h2 id="title">양력 날짜를 음력으로 변환</h2>
+
   <div class="input-group">
-    <label for="year">년 (1900–2100)</label>
-    <input id="year" type="number" min="1900" max="2100" placeholder="예: 1900">
+    <label id="label-year" for="year">년 (1900–2100)</label>
+    <input id="year" type="number" placeholder="예: 1985" />
   </div>
   <div class="input-group">
-    <label for="month">월 (1–12)</label>
-    <input id="month" type="number" min="1" max="12" placeholder="예: 1">
+    <label id="label-month" for="month">월 (1–12)</label>
+    <input id="month" type="number" placeholder="예: 11" />
   </div>
   <div class="input-group">
-    <label for="day">일 (1–31)</label>
-    <input id="day" type="number" min="1" max="31" placeholder="예: 1">
+    <label id="label-day" for="day">일 (1–31)</label>
+    <input id="day" type="number" placeholder="예: 3" />
   </div>
-  <button onclick="convertDate()">변환</button>
+
+  <button onclick="convertDate()" id="convert-btn">변환</button>
+
   <div id="output"></div>
 </div>
 
 <script>
-  // 천간·지지 매핑
-  var stemMap = {
-    '甲':'갑','乙':'을','丙':'병','丁':'정','戊':'무',
-    '己':'기','庚':'경','辛':'신','壬':'임','癸':'계'
+  const langData = {
+    ko: {
+      title: '양력 날짜를 음력으로 변환', year: '년 (1900–2100)', month: '월 (1–12)', day: '일 (1–31)',
+      placeholder: ['예: 1985', '예: 11', '예: 3'], convert: '변환',
+      weekdayOpt: { weekday: 'long' },
+      solarLabel: '양력', lunarLabel: '음력날짜', leap: '윤달', regular: '평달',
+      ganji: '음력간지', zodiac: '띠', yearWord: '년', monthWord: '월', dayWord: '일'
+    },
+    ja: {
+      title: '陽暦 日付を陰暦に変換', year: '年 (1900–2100)', month: '月 (1–12)', day: '日 (1–31)',
+      placeholder: ['例: 1985', '例: 11', '例: 3'], convert: '変換',
+      weekdayOpt: { weekday: 'long' },
+      solarLabel: '陽暦', lunarLabel: '陰暦日', leap: '閏月', regular: '平月',
+      ganji: '干支', zodiac: '干支', yearWord: '年', monthWord: '月', dayWord: '日'
+    },
+    en: {
+      title: 'Convert Solar Date to Lunar', year: 'year (1900–2100)', month: 'month (1–12)', day: 'day (1–31)',
+      placeholder: ['e.g. 1985', 'e.g. 11', 'e.g. 3'], convert: 'Convert',
+      weekdayOpt: { weekday: 'long' },
+      solarLabel: 'Solar', lunarLabel: 'Lunar Date', leap: 'Leap', regular: 'Regular',
+      ganji: 'Lunar Ganji', zodiac: 'Zodiac', yearWord: 'year', monthWord: 'month', dayWord: 'day'
+    }
   };
-  var branchMap = {
-    '子':'자','丑':'축','寅':'인','卯':'묘','辰':'진','巳':'사',
-    '午':'오','未':'미','申':'신','酉':'유','戌':'술','亥':'해'
-  };
-  function transliterate(gz) {
-    return stemMap[gz.charAt(0)] + branchMap[gz.charAt(1)];
+
+  function getGanjiKor(gz) {
+    const stems = ['갑','을','병','정','무','기','경','신','임','계'];
+    const branches = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+    const s = stems[gz.charCodeAt(0) - 0x4E00] || '';
+    const b = branches[gz.charCodeAt(1) - 0x4E00] || '';
+    return s + b + ' (' + gz + ')';
   }
+
+  function getGanjiEn(gz) {
+    const stems = ['Gap','Eul','Byeong','Jeong','Mu','Gi','Gyeong','Shin','Im','Gye'];
+    const branches = ['Ja','Chuk','In','Myo','Jin','Sa','O','Mi','Shin','Yu','Sul','Hae'];
+    const s = stems[gz.charCodeAt(0) - 0x4E00] || '';
+    const b = branches[gz.charCodeAt(1) - 0x4E00] || '';
+    return `${s}-${b} (${gz})`;
+  }
+
   function convertDate() {
-    var y = parseInt(document.getElementById('year').value, 10);
-    var m = parseInt(document.getElementById('month').value, 10);
-    var d = parseInt(document.getElementById('day').value, 10);
-    var outputDiv = document.getElementById('output');
+    const lang = document.getElementById('lang').value;
+    const t = langData[lang];
+    const y = parseInt(document.getElementById('year').value);
+    const m = parseInt(document.getElementById('month').value);
+    const d = parseInt(document.getElementById('day').value);
+    const output = document.getElementById('output');
     if (!y || !m || !d) {
-      outputDiv.innerHTML = '<div class="info">날짜를 모두 입력하세요.</div>';
+      output.innerHTML = `<p>${lang === 'ja' ? 'すべて入力してください。' : (lang === 'en' ? 'Please enter all date fields.' : '날짜를 모두 입력하세요.')}</p>`;
       return;
     }
-    var lunar = solarlunar.solar2lunar(y, m, d);
+
+    const lunar = solarlunar.solar2lunar(y, m, d);
     if (!lunar || !lunar.lYear) {
-      outputDiv.innerHTML = '<div class="info">변환할 수 없는 날짜입니다.</div>';
+      output.innerHTML = `<p>${lang === 'ja' ? '変換できません。' : (lang === 'en' ? 'Invalid date.' : '변환할 수 없는 날짜입니다.')}</p>`;
       return;
     }
-    var weekday = new Date(y, m - 1, d).toLocaleDateString('ko-KR', { weekday:'long' });
-    var leapText = lunar.isLeap ? '윤달' : '평달';
-    var yGzKor = transliterate(lunar.gzYear) + '(' + lunar.gzYear + ')';
-    var mGzKor = transliterate(lunar.gzMonth) + '(' + lunar.gzMonth + ')';
-    var dGzKor = transliterate(lunar.gzDay) + '(' + lunar.gzDay + ')';
-    var animal = lunar.animal;
-    var html = '';
-    html += '<p class="solar-date">양력 ' + y + '년 ' + m + '월 ' + d + '일 (' + weekday + ')</p>';
-    html += '<p class="lunar-date">음력날짜&nbsp;&nbsp;' + lunar.lYear + '년 ' + lunar.lMonth + '월 ' + lunar.lDay + '일&nbsp;(' + leapText + ')</p>';
-    html += '<p class="info">음력간지&nbsp;&nbsp;' + yGzKor + '년 ' + mGzKor + '월 ' + dGzKor + '일</p>';
-    html += '<p class="info">띠&nbsp;&nbsp;' + animal + '띠</p>';
-    outputDiv.innerHTML = html;
+
+    const weekday = new Date(y, m - 1, d).toLocaleDateString(lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'ko-KR', t.weekdayOpt);
+    const leapText = lunar.isLeap ? t.leap : t.regular;
+
+    const yGanji = lang === 'en' ? getGanjiEn(lunar.gzYear) : getGanjiKor(lunar.gzYear);
+    const mGanji = lang === 'en' ? getGanjiEn(lunar.gzMonth) : getGanjiKor(lunar.gzMonth);
+    const dGanji = lang === 'en' ? getGanjiEn(lunar.gzDay) : getGanjiKor(lunar.gzDay);
+
+    const html = `
+      <p><strong>${t.solarLabel} ${y}${t.yearWord} ${m}${t.monthWord} ${d}${t.dayWord} (${weekday})</strong></p>
+      <p class="lunar-date">${t.lunarLabel} ${lunar.lYear}${t.yearWord} ${lunar.lMonth}${t.monthWord} ${lunar.lDay}${t.dayWord} (${leapText})</p>
+      <p>${t.ganji} ${yGanji} ${t.yearWord} ${mGanji} ${t.monthWord} ${dGanji} ${t.dayWord}</p>
+      <p>${t.zodiac} ${lunar.animal}</p>
+    `;
+    output.innerHTML = html;
   }
+
+  function changeLang() {
+    const lang = document.getElementById('lang').value;
+    const t = langData[lang];
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('label-year').textContent = t.year;
+    document.getElementById('label-month').textContent = t.month;
+    document.getElementById('label-day').textContent = t.day;
+    document.getElementById('year').placeholder = t.placeholder[0];
+    document.getElementById('month').placeholder = t.placeholder[1];
+    document.getElementById('day').placeholder = t.placeholder[2];
+    document.getElementById('convert-btn').textContent = t.convert;
+    convertDate();
+  }
+
+  window.onload = changeLang;
 </script>
+
 </body>
 </html>
