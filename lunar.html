@@ -122,41 +122,91 @@
 <script>
   const langData = {
     ko: {
-      title: '양력 날짜를 음력으로 변환', year: '년 (1900–2100)', month: '월 (1–12)', day: '일 (1–31)',
-      placeholder: ['예: 1985', '예: 11', '예: 3'], convert: '변환',
+      title: '양력 날짜를 음력으로 변환',
+      year: '년 (1900–2100)',
+      month: '월 (1–12)',
+      day: '일 (1–31)',
+      placeholder: ['예: 1900', '예: 1', '예: 1'],
+      convert: '변환',
       weekdayOpt: { weekday: 'long' },
-      solarLabel: '양력', lunarLabel: '음력날짜', leap: '윤달', regular: '평달',
-      ganji: '음력간지', zodiac: '띠', yearWord: '년', monthWord: '월', dayWord: '일'
+      solarLabel: '양력',
+      lunarLabel: '음력날짜',
+      leap: '윤달',
+      regular: '평달',
+      ganji: '음력간지',
+      zodiac: '띠',
+      yearWord: '년',
+      monthWord: '월',
+      dayWord: '일'
     },
     ja: {
-      title: '陽暦 日付を陰暦に変換', year: '年 (1900–2100)', month: '月 (1–12)', day: '日 (1–31)',
-      placeholder: ['例: 1985', '例: 11', '例: 3'], convert: '変換',
+      title: '陽暦 日付を陰暦に変換',
+      year: '年 (1900–2100)',
+      month: '月 (1–12)',
+      day: '日 (1–31)',
+      placeholder: ['例: 1900', '例: 1', '例: 1'],
+      convert: '変換',
       weekdayOpt: { weekday: 'long' },
-      solarLabel: '陽暦', lunarLabel: '陰暦日', leap: '閏月', regular: '平月',
-      ganji: '干支', zodiac: '干支', yearWord: '年', monthWord: '月', dayWord: '日'
+      solarLabel: '陽暦',
+      lunarLabel: '陰暦日',
+      leap: '閏月',
+      regular: '平月',
+      ganji: '干支',
+      zodiac: '干支',
+      yearWord: '年',
+      monthWord: '月',
+      dayWord: '日'
     },
     en: {
-      title: 'Convert Solar Date to Lunar', year: 'year (1900–2100)', month: 'month (1–12)', day: 'day (1–31)',
-      placeholder: ['e.g. 1985', 'e.g. 11', 'e.g. 3'], convert: 'Convert',
+      title: 'Convert Solar Date to Lunar',
+      year: 'Year (1900–2100)',
+      month: 'Month (1–12)',
+      day: 'Day (1–31)',
+      placeholder: ['e.g. 1900', 'e.g. 1', 'e.g. 1'],
+      convert: 'Convert',
       weekdayOpt: { weekday: 'long' },
-      solarLabel: 'Solar', lunarLabel: 'Lunar Date', leap: 'Leap', regular: 'Regular',
-      ganji: 'Lunar Ganji', zodiac: 'Zodiac', yearWord: 'year', monthWord: 'month', dayWord: 'day'
+      solarLabel: 'Solar',
+      lunarLabel: 'Lunar Date',
+      leap: 'Leap',
+      regular: 'Regular',
+      ganji: 'Lunar Ganji',
+      zodiac: 'Zodiac',
+      yearWord: 'year',
+      monthWord: 'month',
+      dayWord: 'day'
     }
   };
 
+  const stemKor = ['갑','을','병','정','무','기','경','신','임','계'];
+  const branchKor = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+  const stemEn = ['Gap','Eul','Byeong','Jeong','Mu','Gi','Gyeong','Shin','Im','Gye'];
+  const branchEn = ['Ja','Chuk','In','Myo','Jin','Sa','O','Mi','Shin','Yu','Sul','Hae'];
+
+  function changeLang() {
+    const lang = document.getElementById('lang').value;
+    const t = langData[lang];
+
+    document.getElementById('title').textContent = t.title;
+    document.getElementById('label-year').textContent = t.year;
+    document.getElementById('label-month').textContent = t.month;
+    document.getElementById('label-day').textContent = t.day;
+    document.getElementById('year').placeholder = t.placeholder[0];
+    document.getElementById('month').placeholder = t.placeholder[1];
+    document.getElementById('day').placeholder = t.placeholder[2];
+    document.getElementById('convert-btn').textContent = t.convert;
+
+    convertDate();
+  }
+
   function getGanjiKor(gz) {
-    const stems = ['갑','을','병','정','무','기','경','신','임','계'];
-    const branches = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
-    const s = stems[gz.charCodeAt(0) - 0x4E00] || '';
-    const b = branches[gz.charCodeAt(1) - 0x4E00] || '';
+    const s = stemKor[gz.charCodeAt(0) - 0x4E00];
+    const b = branchKor[gz.charCodeAt(1) - 0x4E00];
     return s + b + ' (' + gz + ')';
   }
 
   function getGanjiEn(gz) {
-    const stems = ['Gap','Eul','Byeong','Jeong','Mu','Gi','Gyeong','Shin','Im','Gye'];
-    const branches = ['Ja','Chuk','In','Myo','Jin','Sa','O','Mi','Shin','Yu','Sul','Hae'];
-    const s = stems[gz.charCodeAt(0) - 0x4E00] || '';
-    const b = branches[gz.charCodeAt(1) - 0x4E00] || '';
+    const s = stemEn[gz.charCodeAt(0) - 0x4E00] || '';
+    const b = branchEn[gz.charCodeAt(1) - 0x4E00] || '';
     return `${s}-${b} (${gz})`;
   }
 
@@ -167,48 +217,38 @@
     const m = parseInt(document.getElementById('month').value);
     const d = parseInt(document.getElementById('day').value);
     const output = document.getElementById('output');
+
     if (!y || !m || !d) {
       output.innerHTML = `<p>${lang === 'ja' ? 'すべて入力してください。' : (lang === 'en' ? 'Please enter all date fields.' : '날짜를 모두 입력하세요.')}</p>`;
       return;
     }
 
     const lunar = solarlunar.solar2lunar(y, m, d);
-    if (!lunar || !lunar.lYear) {
-      output.innerHTML = `<p>${lang === 'ja' ? '変換できません。' : (lang === 'en' ? 'Invalid date.' : '변환할 수 없는 날짜입니다.')}</p>`;
-      return;
-    }
-
     const weekday = new Date(y, m - 1, d).toLocaleDateString(lang === 'en' ? 'en-US' : lang === 'ja' ? 'ja-JP' : 'ko-KR', t.weekdayOpt);
     const leapText = lunar.isLeap ? t.leap : t.regular;
 
-    const yGanji = lang === 'en' ? getGanjiEn(lunar.gzYear) : getGanjiKor(lunar.gzYear);
-    const mGanji = lang === 'en' ? getGanjiEn(lunar.gzMonth) : getGanjiKor(lunar.gzMonth);
-    const dGanji = lang === 'en' ? getGanjiEn(lunar.gzDay) : getGanjiKor(lunar.gzDay);
+    let yGanji = lang === 'en' ? getGanjiEn(lunar.gzYear) : getGanjiKor(lunar.gzYear);
+    let mGanji = lang === 'en' ? getGanjiEn(lunar.gzMonth) : getGanjiKor(lunar.gzMonth);
+    let dGanji = lang === 'en' ? getGanjiEn(lunar.gzDay) : getGanjiKor(lunar.gzDay);
 
-    const html = `
+    const result = `
       <p><strong>${t.solarLabel} ${y}${t.yearWord} ${m}${t.monthWord} ${d}${t.dayWord} (${weekday})</strong></p>
       <p class="lunar-date">${t.lunarLabel} ${lunar.lYear}${t.yearWord} ${lunar.lMonth}${t.monthWord} ${lunar.lDay}${t.dayWord} (${leapText})</p>
       <p>${t.ganji} ${yGanji} ${t.yearWord} ${mGanji} ${t.monthWord} ${dGanji} ${t.dayWord}</p>
       <p>${t.zodiac} ${lunar.animal}</p>
     `;
-    output.innerHTML = html;
+    output.innerHTML = result;
   }
 
-  function changeLang() {
-    const lang = document.getElementById('lang').value;
-    const t = langData[lang];
-    document.getElementById('title').textContent = t.title;
-    document.getElementById('label-year').textContent = t.year;
-    document.getElementById('label-month').textContent = t.month;
-    document.getElementById('label-day').textContent = t.day;
-    document.getElementById('year').placeholder = t.placeholder[0];
-    document.getElementById('month').placeholder = t.placeholder[1];
-    document.getElementById('day').placeholder = t.placeholder[2];
-    document.getElementById('convert-btn').textContent = t.convert;
-    convertDate();
-  }
-
-  window.onload = changeLang;
+  // 자동 언어 감지 및 설정
+  window.onload = () => {
+    const browserLang = navigator.language || navigator.userLanguage;
+    let lang = 'ko';
+    if (browserLang.startsWith('ja')) lang = 'ja';
+    else if (browserLang.startsWith('en')) lang = 'en';
+    document.getElementById('lang').value = lang;
+    changeLang();
+  };
 </script>
 
 </body>
